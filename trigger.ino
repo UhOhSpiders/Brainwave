@@ -47,6 +47,12 @@ void triggerDecide() {
       midiSendOff(currentPitchB, MIDICHANNEL_B); // end a midi note
     }
   }
+  
+  if (bouncerC.fallingEdge()) {
+    Serial.println("BUTTON C TRIGGER");
+  } else if (bouncerC.risingEdge()) {
+    Serial.println("BUTTON C DETRIGGER");
+  }
 
   if (buttonAState || midiState) { // find button held / midi held
     sustain(0);

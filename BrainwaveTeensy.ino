@@ -34,6 +34,8 @@ int count = 0;
 
 boolean buttonAState = false;
 boolean buttonBState = false;
+boolean buttonCState = false;
+boolean buttonDState = false;
 
 int activeCount = 0;
 
