@@ -18,7 +18,7 @@ void buttonSetup() {
   pinMode(BUTTOND, INPUT_PULLUP);
 }
 
-void buttonRead() {
+String buttonRead() {
   boolean buttonAChanged = bouncerA.update(); // Update debouncer
   boolean buttonBChanged = bouncerB.update(); // Update debouncer
   boolean buttonCChanged = bouncerC.update();
@@ -29,6 +29,7 @@ void buttonRead() {
   } else {
     buttonAState = true; // flag as released
     Serial.println("Button A Press");
+    return "Button A";
   }
   if (bouncerB.read())
   {
@@ -36,6 +37,7 @@ void buttonRead() {
   } else {
     buttonBState = true; // flag as released
     Serial.println("Button B Press");
+    return "Button B";
   }
   if (bouncerC.read())
   {
@@ -43,6 +45,7 @@ void buttonRead() {
   } else {
     buttonCState = true;
     Serial.println("Button C Press");
+    return "Button C";
   }
   if (bouncerD.read())
   {
@@ -50,5 +53,7 @@ void buttonRead() {
   } else {
     buttonDState = true;
     Serial.println("Button D Press");
+    return "Button D";
   }
+  return "";
 }

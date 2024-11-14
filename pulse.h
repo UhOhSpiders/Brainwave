@@ -17,6 +17,7 @@ class Pulse {
     Pulse();
     bool active;
     int index;
+    int stripNumber;
     int vector;
     int position;
     int hold;
@@ -27,7 +28,7 @@ class Pulse {
     bool prevCollision;
     int colliding;
 
-    void init(int, int);
+    void init(int, int, int);
     void trigger(int, int);
     void sustain();
     void detrigger();

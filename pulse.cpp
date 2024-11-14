@@ -7,10 +7,10 @@ Pulse::Pulse() {
   //  init();
 }
 
-void Pulse::init(int nP, int sL) {
+void Pulse::init(int nP, int sL, int stripNumber) {
   numPixels = nP;
   spriteLength = sL;
-
+  stripNumber = stripNumber;
   active = false;
   vector = 0;
   position = 0;
@@ -102,12 +102,7 @@ int Pulse::update() {
     }
   }
 
-  //  ab_instance.a = noteOffIndexA;
-  //  ab_instance.b = noteOffIndexB;
-
-  //  if (noteOffIndexB) {
   return noteOffIndexB;
-  //  }
 }
 
 bool Pulse::crossoverZone(int offset, Pulse colliding) {

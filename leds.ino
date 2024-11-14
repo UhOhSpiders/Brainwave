@@ -1,6 +1,6 @@
 #include <WS2812Serial.h>
+#include "pulse.h"
 
-#define LEDPIN 8
 
 // Usable pins:
 //   Teensy LC:   1, 4, 5, 24
@@ -8,10 +8,11 @@
 //   Teensy 3.5:  1, 5, 8, 10, 26, 32, 33, 48
 //   Teensy 3.6:  1, 5, 8, 10, 26, 32, 33
 
-byte drawingMemory[NUMPIXELS * 4];       //  4 bytes per LED
-DMAMEM byte displayMemory[NUMPIXELS * 16]; // 16 bytes per LED
+// byte drawingMemory[NUMPIXELS * 4];       //  4 bytes per LED
+// DMAMEM byte displayMemory[NUMPIXELS * 16]; // 16 bytes per LED
 
-WS2812Serial leds(NUMPIXELS, displayMemory, drawingMemory, LEDPIN, WS2812_RGB);
+
+
 
 uint8_t sprite[] = {23, 15, 9, 4, 2, 1}; // shape of sprite in brightness values (0-23)
 
@@ -54,45 +55,46 @@ byte gammaArray[] = {
   215, 218, 220, 223, 225, 228, 231, 233, 236, 239, 241, 244, 247, 249, 252, 255
 };
 
-void pixelsSetup() {
-  leds.begin();
-  leds.setBrightness(255); // 0=off, 255=brightest
+void ledSetup(WS2812Serial &ledStrip) {
+  ledStrip.begin();
+  ledStrip.setBrightness(255); // 0=off, 255=brightest
+
 }
 
-void colorWipe(int color, int wait_us) {
-  for (int i = 0; i < leds.numPixels(); i++) {
-    leds.setPixel(i, color);
-    leds.show();
-    delayMicroseconds(wait_us);
-  }
-}
+// void colorWipe(int color, int wait_us) {
+//   for (int i = 0; i < leds.numPixels(); i++) {
+//     leds.setPixel(i, color);
+//     leds.show();
+//     delayMicroseconds(wait_us);
+//   }
+// }
 
-void clearStrip() {
-  for (int i; i < NUMPIXELS; i++) {
-    leds.setPixel(i, 0, 0, 0); // set the pixel
-  }
-}
+// void clearStrip() {
+//   for (int i; i < NUMPIXELS; i++) {
+//     leds.setPixel(i, 0, 0, 0); // set the pixel
+//   }
+// }
 
-void clearPixels(int i) { // clears a block of pixels
-  for (int j = 0; j < sizeof(sprite) / sizeof(uint8_t); j++) {
-    leds.setPixel(i - j, 0, 0, 0); // off
-  }
-}
+// void clearPixels(int i) { // clears a block of pixels
+//   for (int j = 0; j < sizeof(sprite) / sizeof(uint8_t); j++) {
+//     leds.setPixel(i - j, 0, 0, 0); // off
+//   }
+// }
 
-void clearPixel(int i) { // clears a pixel
+void clearPixel(WS2812Serial &leds, int i) { // clears a pixel
   leds.setPixel(i, 0, 0, 0); // off
 }
 
-void alternatePixels() { // clear every other pixel
-  for (int i = 0; i < NUMPIXELS; i++) {
-    if (i % 2 == 0) {
-      clearPixel(i);
-      //      Serial.println(i);
-    }
-  }
-}
+// void alternatePixels() { // clear every other pixel
+//   for (int i = 0; i < NUMPIXELS; i++) {
+//     if (i % 2 == 0) {
+//       clearPixel(i);
+//       //      Serial.println(i);
+//     }
+//   }
+// }
 
-void render() {
+void render(WS2812Serial &leds, Pulse pulses[NUMPULSES]) {
   for (int j = 0; j < NUMPULSES; j++) { // step through each sample
     int pixel = pulses[j].position; // get index no
     if (pulses[j].active) { // check if sample is active
@@ -155,7 +157,7 @@ void render() {
           }
           int position = pixel - d;
           leds.setPixel(position, red, green, blue, white); // set this pixel
-          clearPixel(pixel - sampleDuration - 1); // clear trailing pixel
+          clearPixel(leds, pixel - sampleDuration - 1); // clear trailing pixel
         }
 
         // print trailing sprite
@@ -181,7 +183,7 @@ void render() {
           // set pixel colour based on sprite shape and sample colour values
           int position = pixel - k - sampleDuration;
           leds.setPixel(position, red, green, blue, white);
-          clearPixel(position - 1); // clear trailing pixel
+          clearPixel(leds, position - 1); // clear trailing pixel
         }
       }
 
@@ -213,7 +215,7 @@ void render() {
           }
           int position = pixel + d;
           leds.setPixel(position, red, green, blue,  white);
-          clearPixel(pixel + sampleDuration + 1); // clear trailing pixel
+          clearPixel(leds, pixel + sampleDuration + 1); // clear trailing pixel
         }
 
         // print trailing sprite
@@ -239,7 +241,7 @@ void render() {
           // set pixel colour based on sprite shape and sample colour values
           int position = pixel + k + sampleDuration;
           leds.setPixel(position, red, green, blue, white);
-          clearPixel(position + 1); // clear trailing pixel
+          clearPixel(leds, position + 1); // clear trailing pixel
         }
       }
     }

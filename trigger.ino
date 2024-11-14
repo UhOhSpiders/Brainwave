@@ -1,124 +1,144 @@
-void triggerDecide() {
+#include "pulse.h"
+void triggerDecide(Pulse pulses[NUMPULSES])
+{
   int velocity = 31;
-  if (bouncerA.fallingEdge() || midiRisingEdge()) { // check for button press / midi start
-    press(0, velocity); // do the triggering stuff
+  if (bouncerA.fallingEdge() || midiRisingEdge())
+  {                     // check for button press / midi start
+    press(pulses, 0, velocity); // do the triggering stuff
     Serial.println("BUTTON A TRIGGER");
-    if (midiEnable) {
-      int currentPitchA = getPitch(currentPulseA); // [seed % PITCHES];
+    
+    if (midiEnable)
+    {
       Serial.print("MIDI ON ");
-      Serial.print(currentPitchA);
       Serial.print(", ");
       Serial.println(MIDICHANNEL_A);
-      midiSendOn(currentPitchA, MIDICHANNEL_A); // start a midi note
+      midiSendOn(41, MIDICHANNEL_A); // start a midi note
     }
-  } else if (bouncerA.risingEdge() || midiFallingEdge()) { // check for button release / midi end
-    release(0);
+  }
+  else if (bouncerA.risingEdge() || midiFallingEdge())
+  { // check for button release / midi end
+    release(pulses, 0);
     Serial.println("BUTTON A DETRIGGER");
-    if (midiEnable) {
-      int currentPitchA = getPitch(currentPulseA); // [seed % PITCHES];
+    if (midiEnable)
+    {
+      // int currentPitchA = getPitch(currentPulseA); // [seed % PITCHES];
       Serial.print("MIDI OFF ");
-      Serial.print(currentPitchA);
+      // Serial.print(currentPitchA);
       Serial.print(", ");
       Serial.println(MIDICHANNEL_A);
-      midiSendOff(currentPitchA, MIDICHANNEL_A); // end a midi note
+      midiSendOff(41, MIDICHANNEL_A); // end a midi note
     }
   }
-  if (bouncerB.fallingEdge()) { // check for button press / midi start / audio on
-    press(1, velocity); // do the triggering stuff
+  if (bouncerB.fallingEdge())
+  {                     // check for button press / midi start / audio on
+    press(pulses, 1, velocity); // do the triggering stuff
     Serial.println("BUTTON B TRIGGER");
-    if (midiEnable) {
-      int currentPitchB = getPitch(currentPulseB); // - 24; //
+    if (midiEnable)
+    {
+      // int currentPitchB = getPitch(currentPulseB); // - 24; //
       Serial.print("MIDI ON ");
-      Serial.print(currentPitchB);
+      // Serial.print(currentPitchB);
       Serial.print(", ");
-      Serial.println(MIDICHANNEL_B);
-      midiSendOn(currentPitchB, MIDICHANNEL_B); // start a midi note
+      // Serial.println(MIDICHANNEL_B);
+      midiSendOn(21, MIDICHANNEL_B); // start a midi note
     }
-  } else if (bouncerB.risingEdge()) { // check for button release / midi end
-    release(1);
+  }
+  else if (bouncerB.risingEdge())
+  { // check for button release / midi end
+    release(pulses, 1);
     Serial.println("BUTTON B DETRIGGER");
-    if (midiEnable) {
-      int currentPitchB = getPitch(currentPulseB); // - 24; //
+    if (midiEnable)
+    {
+      // int currentPitchB = getPitch(currentPulseB); // - 24; //
       Serial.print("MIDI OFF ");
-      Serial.print(currentPitchB);
+      // Serial.print(currentPitchB);
       Serial.print(", ");
-      Serial.println(MIDICHANNEL_B);
-      midiSendOff(currentPitchB, MIDICHANNEL_B); // end a midi note
+      // Serial.println(MIDICHANNEL_B);
+      midiSendOff(21, MIDICHANNEL_B); // end a midi note
     }
   }
-  if (bouncerC.fallingEdge()) {
+  if (bouncerC.fallingEdge())
+  {
+    press(pulses, 1, velocity);
     Serial.println("BUTTON C TRIGGER");
-    if (midiEnable) {
-      int currentPitchC = getPitch(currentPulseB); // - 24; //
+    if (midiEnable)
+    {
+      // int currentPitchC = getPitch(currentPulseB); // - 24; //
       Serial.print("MIDI ON ");
-      Serial.print(currentPitchC);
+      // Serial.print(currentPitchC);
       Serial.print(", ");
-      Serial.println(MIDICHANNEL_C);
-      midiSendOn(currentPitchC, MIDICHANNEL_C); // start a midi note
-    }
-  } else if (bouncerC.risingEdge()) {
-    Serial.println("BUTTON C DETRIGGER");
-    if (midiEnable) {
-      int currentPitchC = getPitch(currentPulseB); // - 24; //
-      Serial.print("MIDI OFF ");
-      Serial.print(currentPitchC);
-      Serial.print(", ");
-      Serial.println(MIDICHANNEL_C);
-      midiSendOff(currentPitchC, MIDICHANNEL_C); // end a midi note
+      // Serial.println(MIDICHANNEL_C);
+      midiSendOn(50, MIDICHANNEL_C); // start a midi note
     }
   }
-  if (bouncerD.fallingEdge()) {
-    Serial.println("BUTTON D TRIGGER");
-    if (midiEnable) {
-      int currentPitchD = getPitch(currentPulseB); // - 24; //
-      Serial.print("MIDI ON ");
-      Serial.print(currentPitchD);
-      Serial.print(", ");
-      Serial.println(MIDICHANNEL_D);
-      midiSendOn(currentPitchD, MIDICHANNEL_D); // start a midi note
-    }
-  } else if (bouncerD.risingEdge()) {
-    Serial.println("BUTTON D DETRIGGER");
-    if (midiEnable) {
-      int currentPitchD = getPitch(currentPulseB); // - 24; //
+  else if (bouncerC.risingEdge())
+  {
+    release(pulses, 1);
+    Serial.println("BUTTON C DETRIGGER");
+    if (midiEnable)
+    {
       Serial.print("MIDI OFF ");
-      Serial.print(currentPitchD);
-      Serial.print(", ");
-      Serial.println(MIDICHANNEL_D);
-      midiSendOff(currentPitchD, MIDICHANNEL_D); // end a midi note
+      midiSendOff(50, MIDICHANNEL_C); // end a midi note
+    }
+  }
+  if (bouncerD.fallingEdge())
+  {
+    Serial.println("BUTTON D TRIGGER");
+    press(pulses, 0, velocity);
+    if (midiEnable)
+    {
+      midiSendOn(33, MIDICHANNEL_D); // start a midi note
+    }
+  }
+  else if (bouncerD.risingEdge())
+  {
+    Serial.println("BUTTON D DETRIGGER");
+    release(pulses, 0);
+    if (midiEnable)
+    {
+      Serial.print("MIDI OFF ");
+      midiSendOff(33, MIDICHANNEL_D); // end a midi note
     }
   }
 
-  if (buttonAState || midiState) { // find button held / midi held
-    sustain(0);
+  if (buttonAState || midiState)
+  { // find button held / midi held
+    sustain(pulses, 0);
   }
-  if (buttonBState || midiState) { // find button held / midi held
-    sustain(1);
+  if (buttonBState || midiState)
+  { // find button held / midi held
+    sustain(pulses, 1);
   }
 }
 
-
-
-void collisionDetect(int i, int vect) {
-  if (pulses[i].vector == vect) { // check for this vector only
+void collisionDetect(Pulse pulses[NUMPULSES], int i, int vect)
+{
+  if (pulses[i].vector == vect)
+  {                                  // check for this vector only
     int startA = pulses[i].position; // get data for this pulse
     int endA = pulses[i].end;
-    for (int j = 0; j < NUMPULSES; j++) { // step through pulse object array
-      if (pulses[j].active) { // check for active pulses only
-        if (pulses[j].vector != vect) { // check for other vectors only
+    for (int j = 0; j < NUMPULSES; j++)
+    { // step through pulse object array
+      if (pulses[j].active)
+      { // check for active pulses only
+        if (pulses[j].vector != vect)
+        { // check for other vectors only
           //          Serial.println(j);
           int startB = pulses[j].position; // get data for this other pulse
           int endB = pulses[j].end;
-          if (startA >= startB) {
+          if (startA >= startB)
+          {
             //              Serial.println("HERE");/
-            if (endA - SPRITELENGTH <= endB + SPRITELENGTH) { // check for crossover
+            if (endA - SPRITELENGTH <= endB + SPRITELENGTH)
+            { // check for crossover
               Serial.println("COLLISION DETECTED");
-              pulses[i].collision = true; // flag as this pulse colliding
+              pulses[i].collision = true;            // flag as this pulse colliding
               pulses[i].colliding = pulses[j].index; // update pointer to other pulse
-              pulses[j].collision = true; // flag as other pulse colliding
+              pulses[j].collision = true;            // flag as other pulse colliding
               pulses[j].colliding = pulses[i].index; // update pointer to this pulse
             }
-            else { // if no collision, update collision flag to false
+            else
+            { // if no collision, update collision flag to false
               pulses[i].collision = false;
               pulses[j].collision = false;
             }
@@ -126,41 +146,44 @@ void collisionDetect(int i, int vect) {
         }
       }
     }
-    if (pulses[i].collision == true && pulses[i].prevCollision == false) { // check for collision state change rising
+    if (pulses[i].collision == true && pulses[i].prevCollision == false)
+    { // check for collision state change rising
       Serial.println("COLLISION START");
-      if (midiEnable) {
-        int collidingPitchA = getPitch(pulses[i].index); // + 24; // current pulse pitch
-        int collidingPitchB = getPitch(pulses[i].colliding); // + 24; // colliding pulse pitch
+      if (midiEnable)
+      {
+        // int collidingPitchA = getPitch(pulses[i].index);     // + 24; // current pulse pitch
+        // int collidingPitchB = getPitch(pulses[i].colliding); // + 24; // colliding pulse pitch
         Serial.print("MIDI ON ");
-        Serial.print(collidingPitchA);
+        // Serial.print(collidingPitchA);
         Serial.print(", ");
-        Serial.println(MIDICHANNEL_CA);
+        // Serial.println(MIDICHANNEL_CA);
         Serial.print("MIDI ON ");
-        Serial.print(collidingPitchB);
+        // Serial.print(collidingPitchB);
         Serial.print(", ");
-        Serial.println(MIDICHANNEL_CB);
-        midiSendOn(collidingPitchA, MIDICHANNEL_CA); // start a midi note
-        midiSendOn(collidingPitchB, MIDICHANNEL_CB); // start a midi note
+        // Serial.println(MIDICHANNEL_CB);
+        // midiSendOn(collidingPitchA, MIDICHANNEL_CA); // start a midi note
+        // midiSendOn(collidingPitchB, MIDICHANNEL_CB); // start a midi note
       }
     }
-    if (pulses[i].collision == false && pulses[i].prevCollision == true) { // check for collision state change falling
+    if (pulses[i].collision == false && pulses[i].prevCollision == true)
+    { // check for collision state change falling
       Serial.println("COLLISION END");
-      if (midiEnable) {
-        int collidingPitchA = getPitch(pulses[i].index); // + 24; // current pulse pitch
-        int collidingPitchB = getPitch(pulses[i].colliding); // + 24; // colliding pulse pitch
-        Serial.print("MIDI OFF ");
-        Serial.print(collidingPitchA);
-        Serial.print(", ");
-        Serial.println(MIDICHANNEL_CA);
-        Serial.print("MIDI OFF ");
-        Serial.print(collidingPitchB);
-        Serial.print(", ");
-        Serial.println(MIDICHANNEL_CB);
-        midiSendOff(collidingPitchA, MIDICHANNEL_CA); // stop a midi note
-        midiSendOff(collidingPitchB, MIDICHANNEL_CB); // stop a midi note
+      if (midiEnable)
+      {
+        // int collidingPitchA = getPitch(pulses[i].index);     // + 24; // current pulse pitch
+        // int collidingPitchB = getPitch(pulses[i].colliding); // + 24; // colliding pulse pitch
+        // Serial.print("MIDI OFF ");
+        // Serial.print(collidingPitchA);
+        // Serial.print(", ");
+        // Serial.println(MIDICHANNEL_CA);
+        // Serial.print("MIDI OFF ");
+        // Serial.print(collidingPitchB);
+        // Serial.print(", ");
+        // Serial.println(MIDICHANNEL_CB);
+        // midiSendOff(collidingPitchA, MIDICHANNEL_CA); // stop a midi note
+        // midiSendOff(collidingPitchB, MIDICHANNEL_CB); // stop a midi note
       }
     }
-
   }
   pulses[i].prevCollision = pulses[i].collision; // update prevCollision flag
 }

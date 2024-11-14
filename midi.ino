@@ -9,7 +9,7 @@ void midiSetup() {
   usbMIDI.setHandleNoteOff(midiReceiveOff);
 }
 
-int getPitch(int index) {
+int getPitch(int index, Pulse pulses[NUMPULSES]) {
   int seed = pulses[index].seed; // random(0, COLOURS);
   int currentPitch = pitch[seed % PITCHES]; // [seed % PITCHES];
   return currentPitch;
