@@ -35,7 +35,7 @@ void buttonRead() {
     buttonBState = false; // flag as pressed
   } else {
     buttonBState = true; // flag as released
-      Serial.println("Button B Press");
+    Serial.println("Button B Press");
   }
   if (bouncerC.read())
   {

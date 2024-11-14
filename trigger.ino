@@ -23,7 +23,6 @@ void triggerDecide() {
       midiSendOff(currentPitchA, MIDICHANNEL_A); // end a midi note
     }
   }
-
   if (bouncerB.fallingEdge()) { // check for button press / midi start / audio on
     press(1, velocity); // do the triggering stuff
     Serial.println("BUTTON B TRIGGER");
@@ -47,11 +46,47 @@ void triggerDecide() {
       midiSendOff(currentPitchB, MIDICHANNEL_B); // end a midi note
     }
   }
-  
   if (bouncerC.fallingEdge()) {
     Serial.println("BUTTON C TRIGGER");
+    if (midiEnable) {
+      int currentPitchC = getPitch(currentPulseB); // - 24; //
+      Serial.print("MIDI ON ");
+      Serial.print(currentPitchC);
+      Serial.print(", ");
+      Serial.println(MIDICHANNEL_C);
+      midiSendOn(currentPitchC, MIDICHANNEL_C); // start a midi note
+    }
   } else if (bouncerC.risingEdge()) {
     Serial.println("BUTTON C DETRIGGER");
+    if (midiEnable) {
+      int currentPitchC = getPitch(currentPulseB); // - 24; //
+      Serial.print("MIDI OFF ");
+      Serial.print(currentPitchC);
+      Serial.print(", ");
+      Serial.println(MIDICHANNEL_C);
+      midiSendOff(currentPitchC, MIDICHANNEL_C); // end a midi note
+    }
+  }
+  if (bouncerD.fallingEdge()) {
+    Serial.println("BUTTON D TRIGGER");
+    if (midiEnable) {
+      int currentPitchD = getPitch(currentPulseB); // - 24; //
+      Serial.print("MIDI ON ");
+      Serial.print(currentPitchD);
+      Serial.print(", ");
+      Serial.println(MIDICHANNEL_D);
+      midiSendOn(currentPitchD, MIDICHANNEL_D); // start a midi note
+    }
+  } else if (bouncerD.risingEdge()) {
+    Serial.println("BUTTON D DETRIGGER");
+    if (midiEnable) {
+      int currentPitchD = getPitch(currentPulseB); // - 24; //
+      Serial.print("MIDI OFF ");
+      Serial.print(currentPitchD);
+      Serial.print(", ");
+      Serial.println(MIDICHANNEL_D);
+      midiSendOff(currentPitchD, MIDICHANNEL_D); // end a midi note
+    }
   }
 
   if (buttonAState || midiState) { // find button held / midi held
@@ -91,11 +126,6 @@ void collisionDetect(int i, int vect) {
         }
       }
     }
-    //    Serial.print(i);
-    //    Serial.print(", ");
-    //    Serial.print(pulses[i].collision);
-    //    Serial.print(", ");
-    //    Serial.println(pulses[i].prevCollision);
     if (pulses[i].collision == true && pulses[i].prevCollision == false) { // check for collision state change rising
       Serial.println("COLLISION START");
       if (midiEnable) {

@@ -17,10 +17,18 @@
 #define NUMPIXELS 300 
 #define SPRITELENGTH 7
 //#define MIDICHANNEL 1 // you can choose this - stays constant
+// midi channels for strip 1
 #define MIDICHANNEL_A 1 // channel for button A
 #define MIDICHANNEL_B 2 // channel for button B
 #define MIDICHANNEL_CA 3 // channel for collision A
 #define MIDICHANNEL_CB 4 // channel for collision B
+
+// midi channels for strip 2 ??
+#define MIDICHANNEL_C 5
+#define MIDICHANNEL_D 6
+#define MIDICHANNEL_CC 7 // channel for collision C
+#define MIDICHANNEL_CD 8 // channel for collision D
+
 #define COLOURS 7 // must match size of palette arrays
 #define WAIT 15 // (60px/m strip)
 
@@ -90,28 +98,7 @@ void updatePulses() {
       debugPulses(i); // print debug info for this pulses
       collisionDetect(i, 0); // check for collisions on this pulse from POV of vector 0
       int colliding = pulses[i].update();// update this pulse
-      //      Serial.println(colliding);
-
       if (colliding != 9999) {
-
-        // this whole section is probably redundant now because of the killCount
-        //        if (colliding != 8888) {
-        //          Serial.println("KILL");
-        //          int currentPitchA = getPitch(i); // [seed % PITCHES];
-        //          int currentPitchB = getPitch(colliding); // [seed % PITCHES];
-        //          midiSendOff(currentPitchA, MIDICHANNEL_CA);
-        //          Serial.print("MIDI OFF ");
-        //          Serial.print(currentPitchA);
-        //          Serial.print(", ");
-        //          Serial.println(MIDICHANNEL_CA);
-        //          midiSendOff(currentPitchB, MIDICHANNEL_CB);
-        //          Serial.print("MIDI OFF ");
-        //          Serial.print(currentPitchB);
-        //          Serial.print(", ");
-        //          Serial.println(MIDICHANNEL_CB);
-        //        }
-        // end of redundant bit
-
         pulses[i].expire(); //expire this pulse
       }
     }
